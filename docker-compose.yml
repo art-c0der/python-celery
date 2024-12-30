@@ -22,10 +22,10 @@ services:
       - redis
 
   celery:
-    container_name: celery
+    container_name: celery1
     build:
       context: ./demo_celery
-    command: celery --app=demo_celery worker -l INFO
+    command: celery -A demo_celery worker -l INFO -Q celery,celery:1,celery:2,celery:3
     volumes:
       - ./demo_celery:/usr/src/app/
     environment:
@@ -34,3 +34,14 @@ services:
       - ALLOWED_HOSTS=localhost,127.0.0.1
     depends_on:
       - redis
+
+  # celery2:
+  #   container_name: celery2
+  #   build:
+  #     context: ./celery2
+  #   command: celery --app=celery_task worker --loglevel==INFO --queue=queue2
+  #   volumes:
+  #     - ./celery2:/usr/src/app/
+  #   depends_on:
+  #     - redis
+  #     - django
